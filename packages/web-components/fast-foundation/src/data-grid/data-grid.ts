@@ -259,6 +259,14 @@ export class DataGrid extends VirtualizingStackBase {
     }
 
     /**
+     *
+     *
+     * @internal
+     */
+    @observable
+    public authoredRowCount: number = 0;
+
+    /**
      * The default row item template.  Set by the component templates.
      *
      * @internal
@@ -379,7 +387,7 @@ export class DataGrid extends VirtualizingStackBase {
      * @internal
      */
     public handleFocus(e: FocusEvent): void {
-        this.focusOnCell(this.focusRowIndex, this.focusColumnIndex, true);
+        this.queueFocusUpdate();
     }
 
     /**
@@ -400,31 +408,31 @@ export class DataGrid extends VirtualizingStackBase {
         }
 
         let newFocusRowIndex: number;
-        const maxIndex = this.rowElements.length - 1;
+        const maxIndex = this.rowsData.length + this.authoredRowCount - 1;
         const currentGridBottom: number = this.offsetHeight + this.scrollTop;
-        const lastRow: HTMLElement = this.rowElements[maxIndex] as HTMLElement;
+        // const lastRow: HTMLElement = this.rowElements[maxIndex] as HTMLElement;
 
         switch (e.key) {
             case keyArrowUp:
                 e.preventDefault();
                 // focus up one row
-                this.focusOnCell(this.focusRowIndex - 1, this.focusColumnIndex, true);
+                this.focusOnCell(this.focusRowIndex - 1, this.focusColumnIndex, false);
                 break;
 
             case keyArrowDown:
                 e.preventDefault();
                 // focus down one row
-                this.focusOnCell(this.focusRowIndex + 1, this.focusColumnIndex, true);
+                this.focusOnCell(this.focusRowIndex + 1, this.focusColumnIndex, false);
                 break;
 
             case keyPageUp:
                 e.preventDefault();
                 if (this.rowElements.length === 0) {
-                    this.focusOnCell(0, 0, false);
+                    this.focusOnCell(0, 0, true);
                     break;
                 }
                 if (this.focusRowIndex === 0) {
-                    this.focusOnCell(0, this.focusColumnIndex, false);
+                    this.focusOnCell(0, this.focusColumnIndex, true);
                     return;
                 }
 
@@ -433,51 +441,50 @@ export class DataGrid extends VirtualizingStackBase {
                 for (newFocusRowIndex; newFocusRowIndex >= 0; newFocusRowIndex--) {
                     const thisRow: HTMLElement = this.rowElements[newFocusRowIndex];
                     if (thisRow.offsetTop < this.scrollTop) {
-                        this.scrollTop =
-                            thisRow.offsetTop + thisRow.clientHeight - this.clientHeight;
+                        // this.scrollTop = thisRow.offsetTop + thisRow.clientHeight - this.clientHeight;
                         break;
                     }
                 }
 
-                this.focusOnCell(newFocusRowIndex, this.focusColumnIndex, false);
+                this.focusOnCell(newFocusRowIndex, this.focusColumnIndex, true);
                 break;
 
             case keyPageDown:
                 e.preventDefault();
                 if (this.rowElements.length === 0) {
-                    this.focusOnCell(0, 0, false);
+                    this.focusOnCell(0, 0, true);
                     break;
                 }
 
                 // focus down one "page"
                 if (
                     this.focusRowIndex >= maxIndex ||
-                    lastRow.offsetTop + lastRow.offsetHeight <= currentGridBottom
+                    this.containerElement.clientHeight <= currentGridBottom
                 ) {
-                    this.focusOnCell(maxIndex, this.focusColumnIndex, false);
-                    return;
+                    this.focusOnCell(maxIndex, this.focusColumnIndex, true);
+                    break;
                 }
 
                 newFocusRowIndex = this.focusRowIndex + 1;
 
-                for (newFocusRowIndex; newFocusRowIndex <= maxIndex; newFocusRowIndex++) {
-                    const thisRow: HTMLElement = this.rowElements[
-                        newFocusRowIndex
-                    ] as HTMLElement;
-                    if (thisRow.offsetTop + thisRow.offsetHeight > currentGridBottom) {
-                        let stickyHeaderOffset: number = 0;
-                        if (
-                            this.generateHeader === GenerateHeaderOptions.sticky &&
-                            this.generatedHeader !== null
-                        ) {
-                            stickyHeaderOffset = this.generatedHeader.clientHeight;
-                        }
-                        this.scrollTop = thisRow.offsetTop - stickyHeaderOffset;
-                        break;
-                    }
-                }
+                // for (newFocusRowIndex; newFocusRowIndex <= maxIndex; newFocusRowIndex++) {
+                //     const thisRow: HTMLElement = this.rowElements[
+                //         newFocusRowIndex
+                //     ] as HTMLElement;
+                //     if (thisRow.offsetTop + thisRow.offsetHeight > currentGridBottom) {
+                //         let stickyHeaderOffset: number = 0;
+                //         if (
+                //             this.generateHeader === GenerateHeaderOptions.sticky &&
+                //             this.generatedHeader !== null
+                //         ) {
+                //             stickyHeaderOffset = this.generatedHeader.clientHeight;
+                //         }
+                //         this.scrollTop = thisRow.offsetTop - stickyHeaderOffset;
+                //         break;
+                //     }
+                // }
 
-                this.focusOnCell(newFocusRowIndex, this.focusColumnIndex, false);
+                this.focusOnCell(newFocusRowIndex, this.focusColumnIndex, true);
 
                 break;
 
@@ -485,7 +492,7 @@ export class DataGrid extends VirtualizingStackBase {
                 if (e.ctrlKey) {
                     e.preventDefault();
                     // focus first cell of first row
-                    this.focusOnCell(0, 0, true);
+                    this.focusOnCell(0, 0, false);
                 }
                 break;
 
@@ -494,9 +501,9 @@ export class DataGrid extends VirtualizingStackBase {
                     e.preventDefault();
                     // focus last cell of last row
                     this.focusOnCell(
-                        this.rowElements.length - 1,
+                        this.authoredRowCount + this.rowsData.length - 1,
                         this.columnDefinitions.length - 1,
-                        true
+                        false
                     );
                 }
                 break;
@@ -506,7 +513,7 @@ export class DataGrid extends VirtualizingStackBase {
     private focusOnCell = (
         rowIndex: number,
         columnIndex: number,
-        scrollIntoView: boolean
+        forceScrollToTop: boolean
     ): void => {
         if (this.rowElements.length === 0) {
             this.focusRowIndex = 0;
@@ -516,27 +523,52 @@ export class DataGrid extends VirtualizingStackBase {
 
         const focusRowIndex = Math.max(
             0,
-            Math.min(this.rowElements.length - 1, rowIndex)
-        );
-        const focusRow: Element = this.rowElements[focusRowIndex];
-
-        const cells: NodeListOf<Element> = focusRow.querySelectorAll(
-            '[role="cell"], [role="gridcell"], [role="columnheader"], [role="rowheader"]'
+            Math.min(this.rowsData.length + this.authoredRowCount - 1, rowIndex)
         );
 
-        const focusColumnIndex = Math.max(0, Math.min(cells.length - 1, columnIndex));
+        let focusRow: Element | null = null;
 
-        const focusTarget: HTMLElement = cells[focusColumnIndex] as HTMLElement;
+        if (focusRowIndex < this.authoredRowCount || !this.virtualize) {
+            focusRow = this.rowElements[focusRowIndex];
+        } else if (
+            focusRowIndex > this.firstRenderedIndex + this.authoredRowCount &&
+            focusRowIndex < this.lastRenderedIndex + this.authoredRowCount
+        ) {
+            focusRow = this.rowElements[focusRowIndex - this.firstRenderedIndex];
+        }
+
+        const focusRowPosition: number =
+            rowIndex < this.authoredRowCount && focusRow !== null
+                ? (focusRow as HTMLElement).offsetTop
+                : this.getItemPosition(focusRowIndex - this.authoredRowCount);
 
         if (
-            scrollIntoView &&
+            !forceScrollToTop &&
             this.scrollHeight !== this.clientHeight &&
             ((focusRowIndex < this.focusRowIndex && this.scrollTop > 0) ||
                 (focusRowIndex > this.focusRowIndex &&
                     this.scrollTop < this.scrollHeight - this.clientHeight))
         ) {
-            focusTarget.scrollIntoView({ block: "center", inline: "center" });
+            this.scrollTo({
+                top: focusRowPosition,
+                left: this.scrollLeft,
+                behavior: "smooth",
+            });
         }
+
+        if (focusRow === null) {
+            // wait for it to scroll into view
+            this.focusRowIndex = focusRowIndex;
+            return;
+        }
+
+        const cells: NodeListOf<Element> = focusRow.querySelectorAll(
+            '[role="cell"], [role="gridcell"], [role="columnheader"]'
+        );
+
+        const focusColumnIndex = Math.max(0, Math.min(cells.length - 1, columnIndex));
+
+        const focusTarget: HTMLElement = cells[focusColumnIndex] as HTMLElement;
 
         focusTarget.focus();
     };
@@ -556,7 +588,7 @@ export class DataGrid extends VirtualizingStackBase {
 
     private updateFocus(): void {
         this.pendingFocusUpdate = false;
-        this.focusOnCell(this.focusRowIndex, this.focusColumnIndex, true);
+        this.focusOnCell(this.focusRowIndex, this.focusColumnIndex, false);
     }
 
     private toggleGeneratedHeader(): void {
@@ -620,14 +652,19 @@ export class DataGrid extends VirtualizingStackBase {
                 ? this.generatedGridTemplateColumns
                 : this.gridTemplateColumns;
 
-        this.rowElements.forEach((element: Element, index: number): void => {
-            const thisRow = element as DataGridRow;
-            thisRow.rowIndex = index;
+        const rowCount: number = this.rowElements.length;
+        for (let i: number = 0; i < rowCount; i++) {
+            const thisRow = this.rowElements[i] as DataGridRow;
+            if (thisRow.getAttribute("slot") === "generated-rows") {
+                break;
+            }
+            this.authoredRowCount = i + 1;
+            thisRow.rowIndex = i;
             thisRow.gridTemplateColumns = newGridTemplateColumns;
             if (this.columnDefinitionsStale) {
                 thisRow.columnDefinitions = this.columnDefinitions;
             }
-        });
+        }
 
         this.rowindexUpdateQueued = false;
         this.columnDefinitionsStale = false;
