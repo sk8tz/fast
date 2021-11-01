@@ -18,7 +18,7 @@ export const treeItemTemplate: (
     <template
         role="treeitem"
         slot="${x => (x.isNestedItem() ? "item" : void 0)}"
-        tabindex="${x => (!x.focusable ? -1 : 0)}"
+        tabindex="-1"
         class="${x => (x.expanded ? "expanded" : "")} ${x =>
             x.selected ? "selected" : ""} ${x => (x.nested ? "nested" : "")}
             ${x => (x.disabled ? "disabled" : "")}"
