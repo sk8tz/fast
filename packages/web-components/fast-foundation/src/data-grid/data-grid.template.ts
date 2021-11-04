@@ -13,7 +13,8 @@ function createRowItemTemplate(context): ViewTemplate {
             width: 100%;
         "
         slot="generated-rows"
-        :rowIndex="${(x, c) => c.parent.authoredRowCount + c.index}"
+        :rowIndex="${(x, c) =>
+            c.parent.authoredRowCount + c.parent.firstRenderedIndex + c.index}"
         :rowData="${x => x}"
         :cellItemTemplate="${(x, c) => c.parent.cellItemTemplate}"
         :headerCellItemTemplate="${(x, c) => c.parent.headerCellItemTemplate}"
