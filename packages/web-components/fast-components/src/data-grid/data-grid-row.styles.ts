@@ -17,7 +17,7 @@ export const dataGridRowStyles: (
     definition: FoundationElementDefinition
 ) => css`
     :host {
-        grid-row: start;
+        grid-column: 1;
         display: grid;
         padding: 1px 0;
         box-sizing: border-box;

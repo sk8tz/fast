@@ -625,6 +625,8 @@ export class DataGrid extends VirtualizingStackBase {
     handleKeydown(e: KeyboardEvent): void;
     // @internal (undocumented)
     handleRowFocus(e: Event): void;
+    // @internal (undocumented)
+    handleScroll(e: Event): void;
     headerCellItemTemplate?: ViewTemplate;
     // @internal
     rowElements: HTMLElement[];
@@ -633,7 +635,9 @@ export class DataGrid extends VirtualizingStackBase {
     rowsData: object[];
     // @internal (undocumented)
     stack: VirtualizingStack;
-    }
+    // (undocumented)
+    protected visibleItemsChanged(): void;
+}
 
 // @public
 export class DataGridCell extends FoundationElement {
@@ -2626,7 +2630,7 @@ export class VirtualizingStack extends VirtualizingStackBase {
 }
 
 // @beta
-export type VirtualizingStackAutoUpdateMode = "manual" | "resize-only" | "auto";
+export type VirtualizingStackAutoUpdateMode = "manual" | "viewport-resize" | "auto";
 
 // @public (undocumented)
 export class VirtualizingStackBase extends FoundationElement {
@@ -2644,8 +2648,6 @@ export class VirtualizingStackBase extends FoundationElement {
     endSpacerSpan: number;
     // @internal (undocumented)
     firstRenderedIndex: number;
-    // (undocumented)
-    getI: any;
     getItemPosition(itemIndex: number): number;
     // @internal (undocumented)
     gridTemplateSpans: string;
@@ -2661,6 +2663,7 @@ export class VirtualizingStackBase extends FoundationElement {
     layoutUpdateDelay: number;
     // @beta (undocumented)
     orientation: Orientation;
+    requestPositionUpdates: () => void;
     // (undocumented)
     protected reset(): void;
     // (undocumented)
@@ -2684,6 +2687,8 @@ export class VirtualizingStackBase extends FoundationElement {
     virtualizedIndexOffset: number;
     // @internal (undocumented)
     visibleItems: any[];
+    // (undocumented)
+    protected visibleItemsChanged(): void;
     }
 
 // @public
