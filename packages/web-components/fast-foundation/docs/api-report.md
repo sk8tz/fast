@@ -635,9 +635,7 @@ export class DataGrid extends VirtualizingStackBase {
     rowsData: object[];
     // @internal (undocumented)
     stack: VirtualizingStack;
-    // (undocumented)
-    protected visibleItemsChanged(): void;
-}
+    }
 
 // @public
 export class DataGridCell extends FoundationElement {
@@ -2648,7 +2646,7 @@ export class VirtualizingStackBase extends FoundationElement {
     endSpacerSpan: number;
     // @internal (undocumented)
     firstRenderedIndex: number;
-    getItemPosition(itemIndex: number): number;
+    getGeneratedItemPosition: (itemIndex: number) => number;
     // @internal (undocumented)
     gridTemplateSpans: string;
     // (undocumented)
@@ -2687,8 +2685,6 @@ export class VirtualizingStackBase extends FoundationElement {
     virtualizedIndexOffset: number;
     // @internal (undocumented)
     visibleItems: any[];
-    // (undocumented)
-    protected visibleItemsChanged(): void;
     }
 
 // @public
