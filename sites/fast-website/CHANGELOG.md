@@ -1,8 +1,80 @@
 # Change Log - @microsoft/fast-website
 
-This log was last generated on Fri, 22 Oct 2021 17:40:52 GMT and should not be manually modified.
+This log was last generated on Sun, 14 Nov 2021 07:11:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.3.16
+
+Sun, 14 Nov 2021 07:11:13 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (robarb@microsoft.com)
+
+## 1.3.16
+
+Thu, 11 Nov 2021 07:15:33 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (nicholasrice@users.noreply.github.com)
+
+## 1.3.16
+
+Wed, 10 Nov 2021 07:12:54 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (robarb@microsoft.com)
+
+## 1.3.16
+
+Tue, 09 Nov 2021 07:14:09 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (jes@microsoft.com)
+
+## 1.3.16
+
+Sun, 07 Nov 2021 07:12:36 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (mathieu.lavoie@shopify.com)
+
+## 1.3.16
+
+Thu, 04 Nov 2021 07:11:59 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (jes@microsoft.com)
+
+## 1.3.16
+
+Wed, 03 Nov 2021 07:12:39 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (scomea@microsoft.com)
+
+## 1.3.16
+
+Sun, 31 Oct 2021 07:17:45 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (chhol@microsoft.com)
+
+## 1.3.16
+
+Thu, 28 Oct 2021 07:15:32 GMT
+
+### Patches
+
+- Bump @microsoft/site-utilities to v0.9.0 (nicholasrice@users.noreply.github.com)
 
 ## 1.3.16
 

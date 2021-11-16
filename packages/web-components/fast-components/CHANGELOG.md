@@ -1,8 +1,89 @@
 # Change Log - @microsoft/fast-components
 
-This log was last generated on Fri, 22 Oct 2021 17:40:52 GMT and should not be manually modified.
+This log was last generated on Sun, 14 Nov 2021 07:11:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.16.3
+
+Sun, 14 Nov 2021 07:11:13 GMT
+
+### Patches
+
+- Fixing z-indexing problem when using fast-select (robarb@microsoft.com)
+
+## 2.16.2
+
+Thu, 11 Nov 2021 07:15:33 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.26.2 (nicholasrice@users.noreply.github.com)
+
+## 2.16.1
+
+Wed, 10 Nov 2021 07:12:54 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.26.1 (robarb@microsoft.com)
+
+## 2.16.0
+
+Tue, 09 Nov 2021 07:14:09 GMT
+
+### Minor changes
+
+- feat: add search web component (jes@microsoft.com)
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.26.0 (jes@microsoft.com)
+
+## 2.15.2
+
+Sun, 07 Nov 2021 07:12:36 GMT
+
+### Patches
+
+- remove non-null assertion in anchored region (mathieu.lavoie@shopify.com)
+
+## 2.15.1
+
+Thu, 04 Nov 2021 07:11:59 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.25.1 (jes@microsoft.com)
+
+## 2.15.0
+
+Wed, 03 Nov 2021 07:12:39 GMT
+
+### Minor changes
+
+- add placeholder attr to picker (scomea@microsoft.com)
+- fixes style export typings by removing duplicate export and rename picker styles to follow existing convention (chhol@microsoft.com)
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.25.0 (scomea@microsoft.com)
+
+## 2.14.4
+
+Sun, 31 Oct 2021 07:17:45 GMT
+
+### Patches
+
+- update fast eslint package version (chhol@microsoft.com)
+
+## 2.14.3
+
+Thu, 28 Oct 2021 07:15:32 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.23.2 (nicholasrice@users.noreply.github.com)
 
 ## 2.14.2
 

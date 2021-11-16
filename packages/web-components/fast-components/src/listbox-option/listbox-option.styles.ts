@@ -5,7 +5,6 @@ import {
     ElementDefinitionContext,
     focusVisible,
     forcedColorsStylesheetBehavior,
-    FoundationElementDefinition,
     ListboxOptionOptions,
 } from "@microsoft/fast-foundation";
 import { SystemColors } from "@microsoft/fast-web-utilities";
@@ -32,6 +31,10 @@ import {
 } from "../design-tokens";
 import { heightNumber } from "../styles/size";
 
+/**
+ * Styles for Option
+ * @public
+ */
 export const optionStyles: (
     context: ElementDefinitionContext,
     definition: ListboxOptionOptions

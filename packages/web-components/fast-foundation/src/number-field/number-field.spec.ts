@@ -473,6 +473,25 @@ describe("NumberField", () => {
             await disconnect();
         });
 
+        it("should update input field when script sets value", async () => {
+            const { element, disconnect, parent } = await setup();
+            const value = "10";
+
+            expect(
+                (element.shadowRoot?.querySelector(".control") as HTMLInputElement).value
+            ).to.be.empty;
+
+            element.setAttribute('value', value);
+
+            await DOM.nextUpdate();
+
+            expect(
+                (element.shadowRoot?.querySelector(".control") as HTMLInputElement).value
+            ).to.equal(value);
+
+            await disconnect();
+        });
+
         it("should put the control into a clean state, where value attribute changes the property value prior to user or programmatic interaction", async () => {
             const { element, disconnect, parent } = await setup();
             const form = document.createElement("form");
@@ -653,6 +672,80 @@ describe("NumberField", () => {
             await disconnect();
         });
 
+        it("should decrement to zero when no value and negative min", async () => {
+            const min = -10;
+            const { element, disconnect } = await setup({min});
+
+            element.stepDown();
+            await DOM.nextUpdate();
+
+            expect(element.value).to.equal(`0`);
+
+            await disconnect();
+        });
+
+        it("should increment to zero when no value and negative min", async () => {
+            const min = -10;
+            const { element, disconnect } = await setup({min});
+
+            element.stepUp();
+            await DOM.nextUpdate();
+
+            expect(element.value).to.equal(`0`);
+
+            await disconnect();
+        });
+
+        it("should decrement to min when no value and min > 0", async () => {
+            const min = 10;
+            const { element, disconnect } = await setup({min});
+
+            element.stepDown();
+            await DOM.nextUpdate();
+
+            expect(element.value).to.equal(min.toString());
+
+            await disconnect();
+        });
+
+        it("should increment to min when no value and min > 0", async () => {
+            const min = 10;
+            const { element, disconnect } = await setup({min});
+
+            element.stepUp();
+            await DOM.nextUpdate();
+
+            expect(element.value).to.equal(min.toString());
+
+            await disconnect();
+        });
+
+        it("should decrement to max when no value and min and max < 0", async () => {
+            const min = -100;
+            const max = -10;
+            const { element, disconnect } = await setup({min, max});
+
+            element.stepDown();
+            await DOM.nextUpdate();
+
+            expect(element.value).to.equal(max.toString());
+
+            await disconnect();
+        });
+
+        it("should increment to mx when no value and min and max < 0", async () => {
+            const min = -100;
+            const max = -10;
+            const { element, disconnect } = await setup({min, max});
+
+            element.stepUp();
+            await DOM.nextUpdate();
+
+            expect(element.value).to.equal(max.toString());
+
+            await disconnect();
+        });
+
         it("should update the proxy value when incrementing the value", async () => {
             const step = 2;
             const value = 5;
@@ -678,6 +771,32 @@ describe("NumberField", () => {
 
             await disconnect();
         });
+
+        it("should correct rounding errors", async () => {
+            const step = .1;
+            let value = .2.toString();
+            const { element, disconnect } = await setup({step, value});
+            const incrementValue = () => {
+                element.stepUp();
+                value = (parseFloat(value) + step).toPrecision(1);
+            }
+
+            expect(element.value).to.equal(value);
+
+            incrementValue();
+            expect(element.value).to.equal(value);
+
+            incrementValue();
+            expect(element.value).to.equal(value);
+
+            incrementValue();
+            expect(element.value).to.equal(value);
+
+            incrementValue();
+            expect(element.value).to.equal(value);
+
+            await disconnect();
+        })
     });
 
     describe("value validation", () => {

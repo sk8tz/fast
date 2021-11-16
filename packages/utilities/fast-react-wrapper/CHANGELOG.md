@@ -1,8 +1,64 @@
 # Change Log - @microsoft/fast-react-wrapper
 
-This log was last generated on Fri, 22 Oct 2021 17:40:52 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Nov 2021 07:15:33 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.15
+
+Thu, 11 Nov 2021 07:15:33 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.26.2 (nicholasrice@users.noreply.github.com)
+
+## 0.1.14
+
+Wed, 10 Nov 2021 07:12:54 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.26.1 (robarb@microsoft.com)
+
+## 0.1.13
+
+Tue, 09 Nov 2021 07:14:09 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.26.0 (jes@microsoft.com)
+
+## 0.1.12
+
+Thu, 04 Nov 2021 07:11:59 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.25.1 (jes@microsoft.com)
+
+## 0.1.11
+
+Wed, 03 Nov 2021 07:12:39 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.25.0 (scomea@microsoft.com)
+
+## 0.1.10
+
+Sun, 31 Oct 2021 07:17:45 GMT
+
+### Patches
+
+- update fast eslint package version (chhol@microsoft.com)
+
+## 0.1.9
+
+Thu, 28 Oct 2021 07:15:32 GMT
+
+### Patches
+
+- Bump @microsoft/fast-foundation to v2.23.2 (nicholasrice@users.noreply.github.com)
 
 ## 0.1.8
 

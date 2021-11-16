@@ -1,8 +1,72 @@
 # Change Log - @microsoft/fast-foundation
 
-This log was last generated on Wed, 27 Oct 2021 07:11:58 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Nov 2021 07:15:33 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.26.2
+
+Thu, 11 Nov 2021 07:15:33 GMT
+
+### Patches
+
+- convert tsdoc-config dependency to dev-dependency (nicholasrice@users.noreply.github.com)
+
+## 2.26.1
+
+Wed, 10 Nov 2021 07:12:54 GMT
+
+### Patches
+
+- Enabling setting number-field value through script (robarb@microsoft.com)
+
+## 2.26.0
+
+Tue, 09 Nov 2021 07:14:09 GMT
+
+### Minor changes
+
+- feat: add search web component (jes@microsoft.com)
+
+## 2.25.1
+
+Thu, 04 Nov 2021 07:11:59 GMT
+
+### Patches
+
+- fix: change event emitted twice (jes@microsoft.com)
+
+## 2.25.0
+
+Wed, 03 Nov 2021 07:12:39 GMT
+
+### Minor changes
+
+- add placeholder attr to picker (scomea@microsoft.com)
+
+## 2.24.0
+
+Sun, 31 Oct 2021 07:17:45 GMT
+
+### Minor changes
+
+- Added the CheckableFormAssociated mixin to better support the addition of current-checked property/attribute that allows for setting checked state via the .setAttribute() API. This change also converts two lifecycle hooks to methods from properties so that they can be handled correctly by the browser. (nicholasrice@users.noreply.github.com)
+
+### Patches
+
+- fix: number-field increment decrement logic (robarb@microsoft.com)
+- picker focus on input after selection (scomea@microsoft.com)
+- update fast eslint package version (chhol@microsoft.com)
+- Bump @microsoft/fast-element to v1.6.2 (chhol@microsoft.com)
+- Bump @microsoft/fast-web-utilities to v5.0.2 (chhol@microsoft.com)
+
+## 2.23.2
+
+Thu, 28 Oct 2021 07:15:32 GMT
+
+### Patches
+
+- fixes emission of CSS custom properties in FireFox and Safari (nicholasrice@users.noreply.github.com)
 
 ## 2.23.1
 
