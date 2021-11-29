@@ -61,6 +61,7 @@ import type { DesignSystemProvider } from "./design-system-provider/index";
 import type { Disclosure } from "./disclosure/index";
 import type { HorizontalScroll } from "./horizontal-scroll/index";
 import type { Listbox } from "./listbox/index";
+import type { Menu } from "./menu/index";
 import type { Search } from "./search/index";
 import type { SliderLabel } from "./slider-label/index";
 import type { TextArea } from "./text-area/index";
