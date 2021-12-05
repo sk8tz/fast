@@ -346,7 +346,10 @@ export class DataGrid extends VirtualizingStackBase {
         this.addEventListener(eventFocus, this.handleFocus);
         this.addEventListener(eventKeyDown, this.handleKeydown);
         this.addEventListener(eventFocusOut, this.handleFocusOut);
-        this.addEventListener(eventScroll, this.handleScroll);
+        this.addEventListener(eventScroll, this.handleScroll, {
+            passive: true,
+            capture: true,
+        });
 
         this.observer = new MutationObserver(this.onChildListChange);
         // only observe if nodes are added or removed
@@ -402,8 +405,17 @@ export class DataGrid extends VirtualizingStackBase {
                 }
             }
 
+            console.debug("handleFocus");
+
             // focus row is out of view, pick row at top of visual display
-            this.focusOnCell(this.getFirstRowIndexInView(), this.focusColumnIndex, false);
+            const newFocusRowIndex: number = this.getFirstRowIndexInView();
+            if (newFocusRowIndex > -1) {
+                this.focusOnCell(
+                    this.getFirstRowIndexInView(),
+                    this.focusColumnIndex,
+                    false
+                );
+            }
         }
     }
 
@@ -414,14 +426,14 @@ export class DataGrid extends VirtualizingStackBase {
                 return (this.rowElements[i] as DataGridRow).rowIndex;
             }
         }
-        return 0;
+        return -1;
     }
 
     private isRowInView(rowElement: DataGridRow): boolean {
         if (
-            (rowElement !== null &&
-                rowElement.offsetTop + rowElement.offsetHeight > this.scrollTop) ||
-            rowElement.offsetTop < this.scrollTop + this.clientHeight
+            rowElement !== null &&
+            (rowElement.offsetTop + rowElement.offsetHeight > this.scrollTop ||
+                rowElement.offsetTop < this.scrollTop + this.clientHeight)
         ) {
             return true;
         }
@@ -442,6 +454,7 @@ export class DataGrid extends VirtualizingStackBase {
      * @internal
      */
     public handleScroll(e: Event): void {
+        console.debug("scroll");
         this.requestPositionUpdates();
     }
 
@@ -454,14 +467,21 @@ export class DataGrid extends VirtualizingStackBase {
         }
 
         let newFocusRowIndex: number = this.focusRowIndex;
+
         const focusRowElement: DataGridRow | null = this.getRowElement(newFocusRowIndex);
         if (focusRowElement === null || !this.isRowInView(focusRowElement)) {
             newFocusRowIndex = this.getFirstRowIndexInView();
         }
 
+        if (newFocusRowIndex === -1) {
+            return;
+        }
+
         const maxIndex = this.rowsData.length + this.authoredRowCount - 1;
         const currentGridBottom: number = this.scrollTop + this.clientHeight;
         // const lastRow: HTMLElement = this.rowElements[maxIndex] as HTMLElement;
+
+        let thisRowBottom: number = this.itemSpan;
 
         switch (e.key) {
             case keyArrowUp:
@@ -530,8 +550,6 @@ export class DataGrid extends VirtualizingStackBase {
                     this.focusOnCell(maxIndex, this.focusColumnIndex, true);
                     return;
                 }
-
-                let thisRowBottom: number = this.itemSpan;
 
                 for (newFocusRowIndex; newFocusRowIndex <= maxIndex; newFocusRowIndex++) {
                     thisRowBottom =
@@ -619,6 +637,8 @@ export class DataGrid extends VirtualizingStackBase {
         if (this.rowElements.length === 0) {
             return;
         }
+
+        console.debug("focusoncell");
 
         // constrain to number of total rows
         const maxRowIndex = this.rowsData.length + this.authoredRowCount - 1;

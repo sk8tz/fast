@@ -26,6 +26,7 @@ export const dataGridRowStyles: (
     }
 
     :host(.header) {
+        grid-row: 1;
     }
 
     :host(.sticky-header) {
