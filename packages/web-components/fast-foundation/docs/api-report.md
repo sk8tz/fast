@@ -2632,7 +2632,7 @@ export type VirtualizingStackAutoUpdateMode = "manual" | "viewport-resize" | "au
 
 // @public (undocumented)
 export class VirtualizingStackBase extends FoundationElement {
-    // @beta (undocumented)
+    // @beta
     autoUpdateMode: VirtualizingStackAutoUpdateMode;
     // @internal (undocumented)
     connectedCallback(): void;
