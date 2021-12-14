@@ -2649,7 +2649,7 @@ export class VirtualizingStackBase extends FoundationElement {
     getGeneratedItemPosition: (itemIndex: number) => number;
     // @internal (undocumented)
     gridTemplateSpans: string;
-    // @internal (undocumented)
+    // @internal
     handleChange(source: any, splices: Splice[]): void;
     // (undocumented)
     items: object[];
