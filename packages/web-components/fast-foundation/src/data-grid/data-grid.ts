@@ -687,6 +687,7 @@ export class DataGrid extends VirtualizingStackBase {
         );
         this.scrollTop = focusRowPosition;
         this.setFocusOnItemsChanged = true;
+        this.allowLayoutUpdateDelay = false;
         this.isUpdatingFocus = true;
         this.focusRowIndex = rowIndex;
         this.isUpdatingFocus = false;
@@ -794,6 +795,7 @@ export class DataGrid extends VirtualizingStackBase {
             !this.isRowindexVirtualized(this.focusRowIndex)
         ) {
             this.setFocusOnItemsChanged = false;
+            this.allowLayoutUpdateDelay = true;
             this.focusOnCell(this.focusRowIndex, this.focusColumnIndex, false);
         }
     };
