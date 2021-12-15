@@ -103,7 +103,7 @@ export const searchStyles: (
     }
 
     .clear-button {
-        margin: 1px 1px 1px 0;
+        margin: 1px;
         height: calc(100% - 2px);
         opacity: 0;
         background: transparent;
