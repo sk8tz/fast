@@ -34,27 +34,7 @@ import {
     typeRampBaseFontSize,
     typeRampBaseLineHeight,
 } from "../design-tokens";
-import { DirectionalStyleSheetBehavior, heightNumber } from "../styles/index";
-
-/**
- * LTR styles for search
- * @internal
- */
-const ltrStyles = css`
-    .clear-button {
-        right: 1px;
-    }
-`;
-
-/**
- * RTL styles for search
- * @internal
- */
-const rtlStyles = css`
-    .clear-button {
-        left: 1px;
-    }
-`;
+import { heightNumber } from "../styles/index";
 
 const closeButtonHover = DesignToken.create<Swatch>("close-button-hover").withDefault(
     (target: HTMLElement) => {
@@ -288,6 +268,5 @@ export const searchStyles: (
                     color: ${SystemColors.GrayText};
                 }
             `
-        ),
-        new DirectionalStyleSheetBehavior(ltrStyles, rtlStyles)
+        )
     );
