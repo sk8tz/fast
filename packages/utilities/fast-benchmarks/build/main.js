@@ -11,6 +11,8 @@ let webpackConfig = require("../webpack.config");
 const getBenchmarkPaths = require("./utils/get-benchmark-names");
 const resultEmitter = require("./loggers/console");
 const diff = require("./diff");
+require("dotenv").config();
+
 process.env.BENCHMARK_SRC = path.resolve(__dirname, "../benchmarks");
 
 program
@@ -49,13 +51,13 @@ const compiler = webpack(webpackConfig);
 compiler.hooks.done.tap("benchmark", webpackDone);
 var server = new WebpackDevServer(compiler, webpackConfig.devServer);
 console.log("Starting the dev web server...");
-server.listen(port, "localhost", function (err) {
+server.listen(port, process.env.LOCAL_HOST, function(err) {
     if (err) {
         console.error(err);
         exit(1);
     }
 
-    console.log("WebpackDevServer listening at localhost:", port);
+    console.log("WebpackDevServer listening at lcoalhost:", port);
 });
 
 /**
@@ -65,40 +67,69 @@ server.listen(port, "localhost", function (err) {
  * @returns {[htmlPath: string], benchmarkResults}
  */
 async function runBenchmarks(htmlPaths) {
-    const browser = await chromium.launch();
+    const browser = await chromium.launch({ headless: false });
     const context = await browser.newContext();
     const page = await context.newPage();
     const results = {};
 
+    // can we ask if we can authenticate with a token or other ways besides username/password
+    // Create a new incognito browser context
+    const options = {
+        httpCredentials: {
+            username: process.env.MSFT_USERNAME,
+            password: process.env.MSFT_PASSWORD,
+        },
+    };
+
+    await page.goto("https://msperfanalyzer.com");
+
+    // // MS Authenticate
+    await page.fill('input[type="email"]', process.env.MSFT_USERNAME);
+    await page.click('input[type="submit"]');
+    await page.waitForNavigation();
+    // Stay signed in
+    await page.click('input[type="submit"]');
+
+    // arrive at perf tool
+    await page.locator('textarea[type="url"]').waitFor();
     for (var i = 0; i < htmlPaths.length; i++) {
         const name = htmlPaths[i];
         const friendlyName = name.replace(".html", "");
-        console.log(chalk.bold(chalk.green(`Starting benchmark for "${friendlyName}"`)));
-        await page.goto(`localhost:${port}/${name}`);
-
-        try {
-            const result = await page.evaluate(() => {
-                return new Promise((resolve, reject) => {
-                    bench.default.on("complete", function () {
-                        resolve(this);
-                    });
-                    bench.default.on("error", function (event) {
-                        reject(event.currentTarget.name || "un-named");
-                    });
-                    bench.default.run();
-                });
-            });
-
-            results[name] = result;
-        } catch (e) {
-            console.error(chalk.red(`${friendlyName} test failed:`));
-            console.error(chalk.red(e.stack));
-        }
+        console.log(chalk.bold(chalk.green(`Adding benchmark for "${friendlyName}"`)));
+        await page.fill(`#urls${i + 1}`, `${process.env.PUBLIC_HOST_URL}/${name}`);
+        if (i + 1 < htmlPaths.length) await page.click("#addRemove1");
+        // add more URL
     }
 
-    await browser.close();
+    await page.click('button:has-text("Run Test")');
 
-    return results;
+    // runs test....
+    await page.waitForNavigation({ timeout: 200000 });
+
+    // await page.locator('a').waitFor();
+
+    // try {
+    //     const result = await page.evaluate(() => {
+    //         return new Promise((resolve, reject) => {
+    //             bench.default.on("complete", function () {
+    //                 resolve(this);
+    //             });
+    //             bench.default.on("error", function (event) {
+    //                 reject(event.currentTarget.name || "un-named");
+    //             });
+    //             bench.default.run();
+    //         });
+    //     });
+
+    //     results[name] = result;
+    // } catch (e) {
+    //     console.error(chalk.red(`${friendlyName} test failed:`));
+    //     console.error(chalk.red(e.stack));
+    // }
+
+    // await browser.close();
+
+    // return results;
 }
 
 /**
@@ -122,30 +153,30 @@ async function webpackDone(stats) {
 
     const results = await runBenchmarks(testPaths);
 
-    if (options.baseline) {
-        emitBaseline(results);
-    } else {
-        const baselines = JSON.parse(fs.readFileSync(baselinePath).toString());
-        Object.keys(results)
-            .map(name => {
-                const benchmark = results[name];
-                const baseline = baselines[name];
+    // if (options.baseline) {
+    //     emitBaseline(results);
+    // } else {
+    //     const baselines = JSON.parse(fs.readFileSync(baselinePath).toString());
+    //     Object.keys(results)
+    //         .map(name => {
+    //             const benchmark = results[name];
+    //             const baseline = baselines[name];
 
-                if (!baseline) {
-                    console.error(
-                        `No baseline found for ${name}. Run program with -b argument to generate baseline.`
-                    );
-                    exit(1);
-                }
+    //             if (!baseline) {
+    //                 console.error(
+    //                     `No baseline found for ${name}. Run program with -b argument to generate baseline.`
+    //                 );
+    //                 exit(1);
+    //             }
 
-                return { name, baseline, benchmark };
-            })
-            .forEach(x => {
-                resultEmitter(x.name, diff(x.baseline, x.benchmark));
-            });
-    }
+    //             return { name, baseline, benchmark };
+    //         })
+    //         .forEach(x => {
+    //             resultEmitter(x.name, diff(x.baseline, x.benchmark));
+    //         });
+    // }
 
-    exit(0);
+    // exit(0);
 }
 
 /**
